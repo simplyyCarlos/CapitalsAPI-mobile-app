@@ -10,10 +10,10 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class MainActivityController {
+public class CountryListActivityController {
     private final CountryAPIManager apiManager;
 
-    public MainActivityController(){
+    public CountryListActivityController(){
         apiManager = CountryAPIManager.getInstance();
 
     }
