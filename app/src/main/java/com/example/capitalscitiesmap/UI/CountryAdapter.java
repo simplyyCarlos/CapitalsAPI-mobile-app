@@ -1,5 +1,6 @@
 package com.example.capitalscitiesmap.UI;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.Log;
 import android.util.SparseBooleanArray;
@@ -24,14 +25,41 @@ import java.util.List;
 public class CountryAdapter extends
         RecyclerView.Adapter<CountryAdapter.ViewHolder> {
 
-    private final List<Country> countryList;
+    private List<Country> countryList;
+    private List<Country> subList;
+    private boolean showFavorite = false;
     private Context ctx;
     private SparseBooleanArray selectedItems = new SparseBooleanArray();
 
     public CountryAdapter(List<Country> countryList, Context context) {
         this.countryList = countryList;
+        this.subList = new ArrayList<>();
         this.ctx = context;
+
     }
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void setShowFavoritesOnly(boolean showFavoritesOnly) {
+        if (showFavoritesOnly) {
+            List<Country> favoriteList = new ArrayList<>();
+            for (Country country : countryList) {
+                if (country.isFavorite()) {
+                    favoriteList.add(country);
+                }
+            }
+            subList.addAll(countryList);
+            countryList.clear();
+            countryList.addAll(favoriteList);
+            notifyDataSetChanged();
+        } else {
+            countryList.clear();
+            countryList.addAll(subList);
+            subList.clear();
+            notifyDataSetChanged();
+        }
+    }
+
+
 
     @NonNull
     @Override
@@ -51,21 +79,29 @@ public class CountryAdapter extends
         Country country = countryList.get(holder.getAdapterPosition());
         ImageView tmp = (ImageView) holder.itemView.findViewById(R.id.fav_icon);
 
-        if (selectedItems.get(holder.getAdapterPosition(), false)) {
-            tmp.setImageResource(R.drawable.filled_star);
-            country.setFavorite(true);
-        } else {
-            tmp.setImageResource(0);
-            country.setFavorite(false);
-        }
-
-        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                toggleSelection(holder.getAdapterPosition());
-                return true;
+            if (selectedItems.get(holder.getAdapterPosition(), false)) {
+                tmp.setImageResource(R.drawable.filled_star);
+                country.setFavorite(true);
+            } else {
+                tmp.setImageResource(0);
+                country.setFavorite(false);
             }
-        });
+
+
+            if(showFavorite){
+                holder.itemView.setOnLongClickListener(null);
+            }else{
+                holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        toggleSelection(countryList.indexOf(country));
+                        return true;
+                    }
+                });
+            }
+
+
+
 
         String name = country.getName().getCommon();
         String capitalCity = "No Capital city";
@@ -95,6 +131,8 @@ public class CountryAdapter extends
         selectedItems.put(position, !selectedItems.get(position, false));
         notifyItemChanged(position);
     }
+
+
     @Override
     public int getItemCount() {
         return countryList.size();
