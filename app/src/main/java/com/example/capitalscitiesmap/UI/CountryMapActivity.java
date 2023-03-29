@@ -4,12 +4,15 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 
+import com.example.capitalscitiesmap.Model.Country;
 import com.example.capitalscitiesmap.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.example.capitalscitiesmap.databinding.ActivityCountryMapBinding;
@@ -17,6 +20,7 @@ import com.example.capitalscitiesmap.databinding.ActivityCountryMapBinding;
 public class CountryMapActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    private Country country;
     private ActivityCountryMapBinding binding;
 
     @Override
@@ -25,6 +29,7 @@ public class CountryMapActivity extends FragmentActivity implements OnMapReadyCa
 
         binding = ActivityCountryMapBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        country = getIntent().getParcelableExtra("country");
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -46,8 +51,15 @@ public class CountryMapActivity extends FragmentActivity implements OnMapReadyCa
         mMap = googleMap;
 
         // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        LatLng marker = new LatLng(country.getLatlng().get(0), country.getLatlng().get(1));
+
+        float zoomLevel = Math.round(Math.log(8000000 / country.getArea()) / Math.log(3));
+        mMap.addMarker(new MarkerOptions().position(marker).title("Marker 1"));
+        CameraPosition cameraPosition = new CameraPosition.Builder()
+                .target(marker)
+                .zoom(zoomLevel)
+                .build();
+        mMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
     }
 }
