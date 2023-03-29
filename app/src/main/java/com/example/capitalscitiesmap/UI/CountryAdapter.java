@@ -2,6 +2,8 @@ package com.example.capitalscitiesmap.UI;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
@@ -88,17 +90,25 @@ public class CountryAdapter extends
             }
 
 
-            if(showFavorite){
-                holder.itemView.setOnLongClickListener(null);
-            }else{
-                holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                    @Override
-                    public boolean onLongClick(View v) {
-                        toggleSelection(countryList.indexOf(country));
-                        return true;
-                    }
-                });
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                toggleSelection(countryList.indexOf(country));
+                return true;
             }
+        });
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Get the latitude and longitude of the clicked item
+
+                // Launch the Maps activity
+                Intent intent = new Intent(ctx, CountryMapActivity.class);
+                intent.putExtra("country",country);
+                view.getContext().startActivity(intent);
+            }
+        });
 
 
 

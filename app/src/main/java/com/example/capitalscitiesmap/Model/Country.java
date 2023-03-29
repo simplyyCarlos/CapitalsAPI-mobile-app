@@ -1,11 +1,15 @@
 package com.example.capitalscitiesmap.Model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.util.ArrayList;
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 
-public class Country {
+public class Country implements Parcelable {
 
     @SerializedName("name")
     @Expose
@@ -41,6 +45,56 @@ public class Country {
     @Expose
     private CapitalInfo capitalInfo;
     private boolean isFavorite = false;
+
+    protected Country(Parcel in) {
+        capital = in.createStringArrayList();
+        region = in.readString();
+        latlng = new ArrayList<>();
+        in.readList(latlng, Float.class.getClassLoader());
+        area = in.readFloat();
+        population = in.readFloat();
+        continents = in.createStringArrayList();
+        in.readList(continents, String.class.getClassLoader());
+        flags = in.readParcelable(CountryFlag.class.getClassLoader());
+        capitalInfo = in.readParcelable(CapitalInfo.class.getClassLoader());
+        isFavorite = in.readByte() != 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeStringList(capital);
+        dest.writeString(region);
+        dest.writeList(latlng);
+        dest.writeFloat(area);
+        dest.writeFloat(population);
+        dest.writeStringList(continents);
+        dest.writeByte((byte) (isFavorite ? 1 : 0));
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<Country> CREATOR = new Creator<Country>() {
+        @Override
+        public Country createFromParcel(Parcel in) {
+            return new Country(in);
+        }
+
+        @Override
+        public Country[] newArray(int size) {
+            return new Country[size];
+        }
+    };
+
+    public void setArea(float area) {
+        this.area = area;
+    }
+
+    public void setPopulation(float population) {
+        this.population = population;
+    }
 
     public boolean isFavorite() {
         return isFavorite;
@@ -78,7 +132,7 @@ public class Country {
         return languages;
     }
 
-    public void setLanguages(CountryLanguages    languages) {
+    public void setLanguages(CountryLanguages languages) {
         this.languages = languages;
     }
 
@@ -102,16 +156,8 @@ public class Country {
         return area;
     }
 
-    public void setArea(int area) {
-        this.area = area;
-    }
-
     public float getPopulation() {
         return population;
-    }
-
-    public void setPopulation(int population) {
-        this.population = population;
     }
 
     public List<String> getContinents() {
@@ -137,5 +183,4 @@ public class Country {
     public void setCapitalInfo(CapitalInfo capitalInfo) {
         this.capitalInfo = capitalInfo;
     }
-
 }
