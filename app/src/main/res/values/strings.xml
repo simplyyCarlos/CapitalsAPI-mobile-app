@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">CapitalsCitiesMap</string>
+    <string name="title_activity_country_map">CountryMapActivity</string>
+    <string name="fav_button">Fav button</string>
+    <string name="favourite_filter">Favourite Filter</string>
+    <string name="country_name">Country Name</string>
+    <string name="country_description">Country Description</string>
 </resources>

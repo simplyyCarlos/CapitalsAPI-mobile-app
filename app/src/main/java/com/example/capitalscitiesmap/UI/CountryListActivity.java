@@ -32,7 +32,7 @@ public class CountryListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_country_list);
         RecyclerView rvCountries =(RecyclerView) findViewById(R.id.recycler_country);
 
-        adapter = new CountryAdapter(countries);
+        adapter = new CountryAdapter(countries,this);
         rvCountries.setAdapter(adapter);
 
         layoutManager = new LinearLayoutManager(this);

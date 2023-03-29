@@ -40,6 +40,15 @@ public class Country {
     @SerializedName("capitalInfo")
     @Expose
     private CapitalInfo capitalInfo;
+    private boolean isFavorite = false;
+
+    public boolean isFavorite() {
+        return isFavorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        isFavorite = favorite;
+    }
 
     public CountryName getName() {
         return name;
