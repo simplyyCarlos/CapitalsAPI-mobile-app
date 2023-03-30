@@ -5,4 +5,7 @@
     <string name="favourite_filter">Favourite Filter</string>
     <string name="country_name">Country Name</string>
     <string name="country_description">Country Description</string>
+    <string name="title_activity_splash_screen">SplashScreenActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>

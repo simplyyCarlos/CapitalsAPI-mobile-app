@@ -25,6 +25,7 @@ import java.util.List;
 public class CountryListActivity extends AppCompatActivity {
 
     private final CountryListActivityController countryListActivityController = new CountryListActivityController();
+
     private boolean isPushed = false;
     List<Country> countries = new ArrayList<>();
     private CountryAdapter adapter;
@@ -33,14 +34,16 @@ public class CountryListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_country_list);
-        RecyclerView rvCountries =(RecyclerView) findViewById(R.id.recycler_country);
 
+
+        RecyclerView rvCountries =(RecyclerView) findViewById(R.id.recycler_country);
+        getCountries();
         adapter = new CountryAdapter(countries,this);
         rvCountries.setAdapter(adapter);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         rvCountries.setLayoutManager(layoutManager);
-        getCountries(); // Call to API to retrieve the sets of data
+         // Call to API to retrieve the sets of data
 
         ImageButton imageButton = (ImageButton) findViewById(R.id.button_fav);
         imageButton.setOnClickListener(new View.OnClickListener() {
@@ -52,7 +55,6 @@ public class CountryListActivity extends AppCompatActivity {
             }
         });
     }
-
     private void getCountries(){
         countryListActivityController.getCountries(new ICountriesDataManagerCallback() {
             @SuppressLint("NotifyDataSetChanged")
@@ -68,4 +70,5 @@ public class CountryListActivity extends AppCompatActivity {
             }
         });
     }
+
 }
